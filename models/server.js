@@ -16,11 +16,25 @@ class Server{ // ESTE ES EL PATRON SINGLETON
         this.middlewares();
         //rutas de mi aplicación
         this.routes();
+        //Sockets
+        this.sockets()
     }
 
     routes(){
          
     //      this.app.use( this.paths.auth,       require('../routes/auth')) // import routes
+
+    }
+
+    sockets(){
+
+        this.io.on('connection',socket =>{
+            console.log('Cliente comnectado ', socket.id); // cada socket tiene un ID
+
+            socket.on('disconnect', ()=>{
+                console.log('cliente desconectado ',socket.id);
+            })
+        })
 
     }
 
