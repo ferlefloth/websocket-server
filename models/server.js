@@ -7,7 +7,9 @@ class Server{ // ESTE ES EL PATRON SINGLETON
     constructor(){
         this.app = express();
         this.port = process.env.PORT
-        this.paths={}
+        this.server = require('http').createServer(this.app);
+        this.io = require('socket.io')(this.server) //io son los sockets que están conectados, acá esta toda la info de los clientes
+        this.paths={};
     
 
         //middlewares
@@ -23,7 +25,7 @@ class Server{ // ESTE ES EL PATRON SINGLETON
     }
 
     listen(){
-        this.app.listen( this.port ,()=>{
+        this.server.listen( this.port ,()=>{
             console.log('Servidor corriendo en puerto', this.port)
         });
     }
