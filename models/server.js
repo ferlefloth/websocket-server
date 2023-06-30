@@ -1,5 +1,6 @@
 const express = require('express');
 const cors =require('cors');
+const { socketController } = require('../sockets/controller')
 
 //its a good model to create a first server
 class Server{ // ESTE ES EL PATRON SINGLETON
@@ -28,13 +29,7 @@ class Server{ // ESTE ES EL PATRON SINGLETON
 
     sockets(){
 
-        this.io.on('connection',socket =>{
-            console.log('Cliente comnectado ', socket.id); // cada socket tiene un ID
-
-            socket.on('disconnect', ()=>{
-                console.log('cliente desconectado ',socket.id);
-            })
-        })
+        this.io.on('connection',socketController ) // el THIS.IO es cuando el servidor lo envía
 
     }
 
