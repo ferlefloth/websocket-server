@@ -63,7 +63,7 @@ class TicketContol {
 
     atenderTicket(escritorio){
         //no tenemos tickets
-        
+        console.log('el escritorio: ' + escritorio)
         if(this.tickets.length === 0){
             return null;
         }
