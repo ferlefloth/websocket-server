@@ -5,6 +5,8 @@ const ticketControl = new TicketControl()
 
 const socketController = (socket) =>{ 
     socket.emit('ultimo-ticket', ticketControl.ultimo)
+    //console.log('acá los ultimos cuatro: ' + JSON.stringify(ticketControl.ultimosCuatro))
+    socket.emit('estado-actual', ticketControl.ultimosCuatro)
 
     socket.on('disconnect', ()=>{ // el SOCKET.ON es cuando el cliente lo envía y yo lo escucho
     //    console.log('cliente desconectado ',socket.id);
@@ -26,6 +28,7 @@ const socketController = (socket) =>{
         }
         
         const ticket = ticketControl.atenderTicket(escritorio)
+        socket.broadcast.emit('estado-actual', ticketControl.ultimosCuatro)
         console.log('el ticket acá: ' + ticket)
         if(!ticket){
             callback({
