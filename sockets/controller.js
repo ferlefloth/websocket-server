@@ -8,6 +8,8 @@ const socketController = (socket) =>{
     //console.log('acá los ultimos cuatro: ' + JSON.stringify(ticketControl.ultimosCuatro))
     socket.emit('estado-actual', ticketControl.ultimosCuatro)
 
+    socket.emit('tickets-pendientes', ticketControl.tickets.length)
+
     socket.on('disconnect', ()=>{ // el SOCKET.ON es cuando el cliente lo envía y yo lo escucho
     //    console.log('cliente desconectado ',socket.id);
     })
@@ -15,8 +17,7 @@ const socketController = (socket) =>{
     socket.on('siguiente-ticket',(payload, callback)=>{ // Acá escuchamos desde el back , lo que está en el scoket-client en los add event listeners. El payload es el mensaje que viene desde la función del addListener del socket-cliente
         const siguiente = ticketControl.siguiente();
         callback(siguiente)
-
-        //TODO: Notificar que hay un ticket pendiente par aasignar
+        socket.broadcast.emit('tickets-pendientes', ticketControl.tickets.length)
     })
 
     socket.on('atender-ticket',({ escritorio }, callback)=>{ // hace descontructing del payload y lo deja como {escritorio}
@@ -28,7 +29,10 @@ const socketController = (socket) =>{
         }
         
         const ticket = ticketControl.atenderTicket(escritorio)
+        
         socket.broadcast.emit('estado-actual', ticketControl.ultimosCuatro)
+        socket.broadcast.emit('tickets-pendientes', ticketControl.tickets.length)
+
         console.log('el ticket acá: ' + ticket)
         if(!ticket){
             callback({
